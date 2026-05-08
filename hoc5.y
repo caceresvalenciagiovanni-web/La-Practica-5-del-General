@@ -10,10 +10,10 @@ void execerror(char *s, char *t);
 void fpecatch(int e);
 %}
 %union   {
-Symbol  *sym;   /* apuntador de la tabla de s韒bolos */ 
-Inst    *inst;  /* instrucci髇 de m醧uina */
+Symbol  *sym;   /* apuntador de la tabla de s铆mbolos */ 
+Inst    *inst;  /* instrucci贸n de m谩quina */
 }
-%token  <sym>   NUMBER PRINT VAR BLTIN INDEF WHILE IF ELSE 
+%token  <sym>   NUMBER PRINT VAR BLTIN UNDEF WHILE IF ELSE 
 %type   <inst>  stmt asgn expr stmtlist cond while if end
 
 %right	'='
@@ -38,19 +38,18 @@ asgn:     VAR '=' expr  { $$=$3; code3(varpush,(Inst)$1,assign); }
          ;
 stmt:     expr   { code(pop1); }
 	| PRINT expr    { code(prexpr); $$ = $2;} 
-            $1   $2   $3   $4
 	| while cond stmt end {
-		($1)[1] = (Inst)$3;     /* cuerpo de la iteraci髇 */ 
-		($1)[2] = (Inst)$4; }   /* terminar si la condici髇 no se cumple */
+		($1)[1] = (Inst)$3;     /* cuerpo de la iteraci贸n */ 
+		($1)[2] = (Inst)$4; }   /* terminar si la condici贸n no se cumple */
    
-	| if cond stmt end {    /* proposici髇 if que no emplea else */ 
+	| if cond stmt end {    /* proposici贸n if que no emplea else */ 
 		($1)[1] = (Inst)$3;     /* parte then */ 
-		($1)[3] = (Inst)$4; }   /* terminar si la condici髇 no se cumple */ 
+		($1)[3] = (Inst)$4; }   /* terminar si la condici贸n no se cumple */ 
        
-	| if cond stmt end ELSE stmt end {  /* proposici髇 if con parte else */
+	| if cond stmt end ELSE stmt end {  /* proposici贸n if con parte else */
 		($1)[1]   =   (Inst)$3;	/*  parte then  */
 		($1)[2]   =   (Inst)$6;	/* parte else   */
-		($1)[3]   =   (Inst)$7;   } /*   terminar si la condici髇 no se cumple  */
+		($1)[3]   =   (Inst)$7;   } /*   terminar si la condici贸n no se cumple  */
 	|   '{'   stmtlist   '}' {   $$  =  $2;   }
         ;
 cond:	'('   expr   ')'      {   code(STOP);  $$  =  $2;   }
@@ -99,7 +98,7 @@ jmp_buf begin;
 char *progname;
 int lineno = 1;
 
-main(int argc, char **argv)       /* hoc5 */ 
+int main(int argc, char **argv)       /* hoc5 */ 
 {
 /*int  fpecatch();*/
 progname  =  argv[0];
@@ -111,13 +110,13 @@ execute(prog);
 return 0; 
 }
 
-yylex(){
+int yylex(){
 int c;
 while  ((c=getchar()) ==  ' ' ||  c ==   '\t')
           ;
 if (c == EOF)
 	return 0; 
-if (c == '.' || isdigit(c)) {   /* n鷐ero */
+if (c == '.' || isdigit(c)) {   /* n煤mero */
 	double d;
 	ungetc(c, stdin); 
 	scanf("%lf", &d);
@@ -161,7 +160,7 @@ int follow(int expect,   int ifyes,   int ifno)  { /*   buscar  >=, etc.   */
    return  ifno;
 }
 
-void yyerror(char *s)      /* comunicar errores de tiempo de compilaci髇 */
+void yyerror(char *s)      /* comunicar errores de tiempo de compilaci贸n */
 {
 warning(s, (char *)0); 
 } 
