@@ -74,7 +74,7 @@ expr:    NUMBER { $$ = code2(constpush, (Inst)$1); }
 	|expr '+' expr { code(add); }
 	|expr '-' expr { code(sub); }
 	|expr '*' expr { code(mul); }
-	|expr '/' expr { code(div); }
+	|expr '/' expr { code(divide); }
 	|expr '^' expr { code (power); }
 	|'-' expr %prec UNARYMINUS  { $$ = $2; code(negate); }
 	|expr GT expr  { code(gt); }
@@ -97,6 +97,11 @@ jmp_buf begin;
 
 char *progname;
 int lineno = 1;
+
+/* Prototipos agregados para evitar advertencias */
+void init(void);
+void initcode(void);
+int follow(int expect, int ifyes, int ifno);
 
 int main(int argc, char **argv)       /* hoc5 */ 
 {
