@@ -26,7 +26,7 @@ extern	void eval(void);
 extern	void add(void);
 extern	void sub(void); 
 extern	void mul(void); 
-extern	void div(void); 
+extern	void divide(void); 
 extern	void negate(void); 
 extern	void power(void);
 extern	void assign(void); 
