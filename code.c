@@ -1,14 +1,15 @@
 #include "hoc.h" 
 #include "y.tab.h"
+#include <stdio.h>
 #define NSTACK  256
 static  Datum  stack[NSTACK];  /* la pila */
 static  Datum   *stackp;       /* siguiente lugar libre en la pila */
 #define NPROG   2000
-Inst    prog[NPROG];    /* la m醧uina */
-Inst    *progp;         /* siguiente lugar libre para la generaci髇 de c骴igo */
-Inst    *pc;	/* contador de programa durante la ejecuci髇 */
+Inst    prog[NPROG];    /* la m谩quina */
+Inst    *progp;         /* siguiente lugar libre para la generaci贸n de c贸digo */
+Inst    *pc;	/* contador de programa durante la ejecuci贸n */
 
-void initcode()      /* inicializaci髇 para la generaci髇 de c骴igo */ {
+void initcode()      /* inicializaci贸n para la generaci贸n de c贸digo */ {
    stackp = stack;
    progp = prog;
 }
@@ -49,26 +50,26 @@ push(d);
 
 void whilecode() {
    Datum d;
-   Inst  *savepc  = pc;	/*  cuerpo de la iteraci髇  */
-   execute(savepc+2);     /*   condici髇   */ 
+   Inst  *savepc  = pc;	/*  cuerpo de la iteraci贸n  */
+   execute(savepc+2);     /*   condici贸n   */ 
    d  =  pop(); 
    while   (d.val)   {
       execute(*((Inst  **)(savepc)));     /*  cuerpo  */
       execute(savepc+2);
       d  = pop(); 
    } 
-   pc  =  *((Inst  **)(savepc+1));     /*   siguiente proposici髇   */
+   pc  =  *((Inst  **)(savepc+1));     /*   siguiente proposici贸n   */
 }
 void ifcode(){
    Datum d;
    Inst  *savepc  = pc;	/* parte then */
-   execute(savepc+3);	/*  condici髇   */
+   execute(savepc+3);	/*  condici贸n   */
    d  =  pop(); 
    if (d.val)
       execute(*((Inst   **)(savepc))); 
-   else  if   (*((Inst  **)(savepc+1)))   /*  縫arte else?   */
+   else  if   (*((Inst  **)(savepc+1)))   /*  驴parte else?   */
       execute(*(( Inst  **) (savepc+1)));
-   pc  =  *((Inst  **)(savepc+2));	/*  siguiente proposici髇   */ 
+   pc  =  *((Inst  **)(savepc+2));	/*  siguiente proposici贸n   */ 
 }
 
 void eval( )	/*  evaluar una variable en la pila   */
@@ -120,7 +121,7 @@ push(d);
 }
 void power(){
 Datum d1, d2;
-extern double Pow();
+extern double Pow(double, double);
 d2 = pop();
 d1 = pop();
 d1.val = Pow(d1.val, d2.val);
@@ -155,7 +156,7 @@ d  =  pop();
 d.val  =   (*(double   (*)(double))(*pc++))(d.val);
 push(d);
 }
-Inst *code(Inst f){ /*   instalar una instrucci髇 u operando   */
+Inst *code(Inst f){ /*   instalar una instrucci贸n u operando   */
    //puts("code1");
    Inst *oprogp = progp;
    if (progp > &prog [ NPROG -1 ])
@@ -163,7 +164,7 @@ Inst *code(Inst f){ /*   instalar una instrucci髇 u operando   */
    *progp++ = f;
    return oprogp;
 }
-void execute(Inst *p){	/*   ejecuci髇 con la m醧uina   */
+void execute(Inst *p){	/*   ejecuci贸n con la m谩quina   */
 for  (pc  =  p;   *pc != STOP; ) 
 	(*pc++)();
 }
