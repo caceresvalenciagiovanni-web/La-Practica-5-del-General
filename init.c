@@ -1,7 +1,7 @@
 #include "hoc.h"
 #include "y.tab.h"
 #include <math.h>
-extern double   Log(), Log10(), Sqrt(), Exp( ) , integer ( ) ;
+extern double   Log(double), Log10(double), Sqrt(double), Exp(double) , integer(double) ;
 
 static struct { char   *name;	/* Palabras clave */
 int    kval;
@@ -24,10 +24,10 @@ static struct {         /* Constantes */ char *name; double cval;
 
 static struct {	/*	Predefinidos */
 char *name;
-double	(*func)();
+double	(*func)(double);
 } builtins[] =	{
 "sin",	sin,
-"coa" ,	cos,
+"cos" ,	cos,
 "atan",	atan,
 "log", Log,
 "log10", Log10,
@@ -38,7 +38,7 @@ double	(*func)();
 0,	0
 };
 
-init( )  /* instalar constantes y predefinidos en la tabla */
+void init(void)  /* instalar constantes y predefinidos en la tabla */
 {
 int i;
 Symbol *s;
