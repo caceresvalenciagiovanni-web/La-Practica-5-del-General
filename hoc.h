@@ -29,7 +29,8 @@ extern Datum pop();
 typedef void (*Inst)();  /* instrucción de máquina */ 
 
 #define STOP    (Inst) 0
-extern	Inst prog[];
+extern Inst prog[], *progp;
+extern void execute(Inst *p);
 
 /* Instrucciones de máquina que actualizaremos más adelante */
 extern void eval(), add(), sub(), mul(), divop(), negate(), power();
