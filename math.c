@@ -1,36 +1,31 @@
 #include <math.h> 
 #include <errno.h>
+#include "hoc.h"
 
-extern  int errno;
-double  errcheck();
+double  errcheck(double d, char *s);
 
-double Log(x)
-double x;
+double Log(double x)
 {
 return errcheck(log(x) , "log");
 }
 
 
-double Log10(x)
-double x;
+double Log10(double x)
 {
 return  errcheck(log10(x), "log10");
 }
 
-double Sqrt(x)
-double x; 
+double Sqrt(double x)
 {
 return errcheck(sqrt(x), "sqrt"); 
 }
 
-double Exp(x)
-double x; 
+double Exp(double x)
 {
 return errcheck( exp(x) , "exp" ) ;
 }
 
-double Pow(x, y)
-double x, y;
+double Pow(double x, double y)
 {
 return errcheck(pow(x,y), "exponentiation");
 }
