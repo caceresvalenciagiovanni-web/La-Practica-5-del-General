@@ -1,7 +1,11 @@
 #include "hoc.h"
 #include "y.tab.h"
+#include <string.h>
+#include <stdlib.h>
 
-static Symbol *symlist = 0;  /* lista ligada da la tabla de símbolos */
+static Symbol *symlist = 0;  /* lista ligada da la tabla de sÃ­mbolos */
+
+char *emalloc(unsigned n);
 
 Symbol *lookup(char *s)      /* encontrar s an la tabla da simbolos */
 {
@@ -15,7 +19,6 @@ return 0;      /* 0 ==> not found */
 Symbol *install(char *s, int t, double d)
 {
 Symbol *sp;
-char *emalloc();
 sp = (Symbol *) emalloc(sizeof(Symbol));
 sp->name = emalloc(strlen(s)+1);
 strcpy(sp->name, s);
@@ -28,7 +31,7 @@ return sp;
 
 char *emalloc(unsigned n)       /* veriflcar retorno da malloc */
 {
-char *p, *malloc();
+char *p;
 p = malloc(n);
 if (p == 0)
 execerror("out of memory", (char *) 0);
